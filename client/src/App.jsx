@@ -29,6 +29,16 @@ function App() {
   }
   };
 
+  const deleteNote= async (id)=>{
+    try{
+    await axios.delete(`http://localhost:5000/notes/${id}`);
+    fetchNotes();
+    }
+    catch(err){
+      console.error(err);
+    }
+  }
+
   useEffect(()=>{
     fetchNotes();
   },[]);
@@ -51,13 +61,13 @@ function App() {
       />
       <button onClick={addNote}>Add note</button>
 
-      <p>Title: {title}</p>
-      <p>Content: {content}</p>
+     
 
       {notes.map((note)=>(
         <div key={note.id}>
           <h1>{note.title}</h1>
           <p>{note.content}</p>
+          <button onClick={()=>deleteNote(note.id)}>Delete note</button>
         </div>
       ))}
 
