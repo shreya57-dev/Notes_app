@@ -6,6 +6,9 @@ function App() {
   const [notes,setNotes]=useState([]);
   const [title,setTitle]=useState("");
   const [content,setContent]=useState("");
+  const [editId,setEditId]=useState(null);
+  const [editTitle,setEditTitle]=useState("");
+  const [editContent,setEditContent]=useState("");
 
   const fetchNotes = async()=>{
     const response=await axios.get("http://localhost:5000/notes");
@@ -39,6 +42,26 @@ function App() {
     }
   }
 
+  const updateNote=async()=>{
+    try{
+      await axios.put(`http://localhost:5000/notes/${editId}`,{
+        title:editTitle,
+        content:editContent
+      });
+      fetchNotes();
+      setEditId(null);
+    }
+    catch(err){
+    console.error(err);
+    }
+  }
+
+  const startEditting=async(note)=>{
+    setEditId(note.id);
+    setEditTitle(note.title);
+    setEditContent(note.content);
+  };
+
   useEffect(()=>{
     fetchNotes();
   },[]);
@@ -61,13 +84,37 @@ function App() {
       />
       <button onClick={addNote}>Add note</button>
 
-     
-
       {notes.map((note)=>(
         <div key={note.id}>
+          
+          {(editId===note.id)?
+          (//form to edit and save
+          <>
+           <input 
+           type="text"
+           placeholder="Enter title"
+           value={editTitle}
+           onChange={(e)=>setEditTitle(e.target.value)}
+           />
+
+           <textarea
+           placeholder="Enter content"
+           value={editContent}
+           onChange={(e)=>setEditContent(e.target.value)}
+           />
+            <button onClick={updateNote}>Save</button>
+           </>
+          ):
+          (
+            <>
           <h1>{note.title}</h1>
           <p>{note.content}</p>
+          <button onClick={()=>startEditting(note)}>Edit note</button>
           <button onClick={()=>deleteNote(note.id)}>Delete note</button>
+          </>
+          )
+          }
+        
         </div>
       ))}
 
