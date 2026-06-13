@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "./App.css";
 
 function App() {
 
@@ -67,10 +68,10 @@ function App() {
   },[]);
 
   return (
-    <>
+    <div className="container">
       <h1>Notes App</h1>
 
- <input 
+      <input
       type="text" 
       placeholder="Enter title"
       value={title}
@@ -82,10 +83,11 @@ function App() {
       value={content}
       onChange={(e)=>setContent(e.target.value)}
       />
-      <button onClick={addNote}>Add note</button>
+      <button onClick={addNote} className="add-btn">Add note</button>
 
       {notes.map((note)=>(
-        <div key={note.id}>
+        <div key={note.id}
+        className="card">
           
           {(editId===note.id)?
           (//form to edit and save
@@ -119,7 +121,7 @@ function App() {
       ))}
 
      
-    </>
+    </div>
   );
 }// coyyyduuuuuu deeeaaarrrrrr lalalalalalalala o myyyy dumboodaaaaaaaaaaaaa o my daaaaaaaaarlingggggggggggg
 
